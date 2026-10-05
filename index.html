@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Chapter 26: Clever Cheap - Full Game</title>
+<style>
+body{margin:0;overflow:hidden;background:#14140a;font-family:monospace;color:#ffeebb}
+#storyAll{position:absolute;inset:0;z-index:999;background:#14140a;overflow-y:auto;padding:20px;pointer-events:all}
+.hud{position:absolute;background:rgba(30,25,10,0.9);border:2px solid #ffcc00;padding:10px;border-radius:8px;pointer-events:all}
+#hudS{top:10px;left:10px;width:360px}
+#hudQ{top:10px;right:10px;width:360px;border-color:#00ff88}
+#hudI{bottom:10px;left:10px;width:430px;display:none}
+#hudM{bottom:10px;right:10px;width:170px;height:170px}
+.bar{width:100%;height:17px;background:#2a2211;border:1px solid #ffcc00;margin:3px 0}
+.f{height:100%;transition:width 0.2s}
+#hpF{background:linear-gradient(90deg,#ff3300,#ff8855);width:100%}
+#grF{background:linear-gradient(90deg,#ffcc00,#ffff55);width:100%}
+#xpF{background:linear-gradient(90deg,#00ff88,#55ffaa);width:0%}
+#skillW{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;background:#1a1505;border:3px solid #ffcc00;padding:20px;display:none;z-index:90;pointer-events:all;border-radius:12px}
+button{background:#332500;color:#fff;border:1px solid #ffcc00;padding:6px 11px;margin:2px;cursor:pointer;border-radius:4px}
+button:hover{background:#554400;color:yellow}
+#cross{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;color:#ffcc00;pointer-events:none}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}</script>
+</head>
+<body>
+
+<div id="storyAll">
+<h1 style="text-align:center;color:#ffcc00">Chapter 26:Bedtime Stories<br>March 13 2020<br>Clever Cheap<br>From the creations of Economic Destructions And "The Rages Band"</h1>
+<div style="max-width:900px;margin:auto;background:#221d0a;padding:20px;border:2px solid #ffcc00;white-space:pre-wrap;line-height:1.7">
+Once upon a time in a far, far home of Amazon homes. There is a crazy man who is fond of thinking and wasting money. His name is Alpha Libero. That in the market of selling some fruits of "Clever Market". Alpha Libero wants to buy some more and more fruits. Till as when he payed it already. He forgot to brought home is wallet in the market. Because of too much greedy to buy all the fruits he want. Alpha Libero forgot his wallet that didn't know. But he is already going home that night. And then in the Clever Market, Andio the thief already steal the wallet of Alpha Libero and left out easily. So as the 1st day arise Alpha Libero again go to the "Clever Market" he noticed that why his wallet lost. He asked the person name Fran, in the "Clever Market" and said, Hey what's your problem hmmm. Alpha Libero said, I think someone stole my own wallet. Fran said, don't worry I know what's going on. It's because of your greedy on too much buying of fruits. You already forgot and just left the wallet in the "Clever Market". Alpha Libero said, Is it true! How do I'm gonna do next. And when Fran and Alpha Libero talking about the plan. So that no one could steal anymore his wallet. Fran give Alpha Libero the last wallet and carefully said, Alpha Libero! Learn how to understand if too much buying of this especially the fruits. Within full of thinking in buying. You almost forgot to get your wallet in the market. That's why strangers or thief steal it as a moral lesson. And Alpha Libero know it. He get that wallet gave by Fran and go home. After the 2nd day came. Alpha Libero didn't know that Fran gave the wallet. But in the inside is full of cash. Because Alpha Libero think that he is rich and a hermit too that helped him. As the story ends. This 2nd day is coming Alpha Libero again goes in the "Clever Market" and want to buy only the less fruit. So Alpha Libero already received his own lesson that to avoid much greedy. He can't never forget to leave again the wallet this last time in "Clever Market". And then Alpha Libero said to Fran, thank you so much. I learn how to become cheap and not greedy anymore. With this I can't no longer steal by the thief. Fran said, Just always remember to don't overthink so much in becoming greedy in buy so much expensive. So that you will never forget to get what you want. Especially your wallet lost that time. And learn this is the last wallet ok. And by the way I'm the hermit. Fran Hermit. And you are now the "Clever Cheap". You think wisely because you learn from your past mistakes to think good for cheap. And not bad for being greedy for taking expensive of all that you want. Alpha Libero said, thank you and I learn a lot in this.
+Moral Lesson: Be cheap in order to defeat greed and pride. Don't ever abuse and imagine the things you want to engage. Or else you will lose or forget what you want to have. Being cheap can't lose what you want. And greed can lose all you want.
+</div>
+<center style="margin:20px">
+<p>ALL SYSTEMS: Player Stats Level Classes | 3D World Map Environment | Camera Third/First Person | NPCs | Quests Main Side | Combat | Enemies Bosses | Inventory Equipment | HUD Health Mini-map | Skill Tree</p>
+<p>WASD Move | Mouse Look | F Camera | E Talk/Buy | Q Inventory | K Skill Tree | Click Attack | SHIFT Run</p>
+<button onclick="start()" style="font-size:24px;background:#ffcc00;color:#000;padding:16px 45px;border-radius:8px">START AS ALPHA LIBERO - BECOME CLEVER CHEAP</button>
+</center>
+</div>
+
+<div class="hud" id="hudS">
+<b>PLAYER: Alpha Libero</b><br>
+Class: <select id="classSel" onchange="cChange()"><option>Alpha Libero - Greedy Buyer [Starts Greedy]</option><option>Fran Hermit - Clever Cheap [High WIS]</option><option>Market Guard - High DEF</option></select> LVL <span id="lv">1</span>
+<div>Health</div><div class="bar"><div id="hpF" class="f"></div></div>
+<div>Greed / Cheap Meter (Low = Clever)</div><div class="bar"><div id="grF" class="f"></div></div>
+<div>XP - Economic Lesson</div><div class="bar"><div id="xpF" class="f"></div></div>
+<div>Wallet: P<span id="wal">100</span> | Fruits: <span id="fr">0</span> | STR:<span id="st">6</span> DEF:<span id="df">5</span> WIS:<span id="ws">7</span></div>
+</div>
+
+<div class="hud" id="hudQ">
+<b id="qT">MAIN QUEST: Clever Cheap</b><div id="qD">Day 1: You lost wallet in Clever Market! Find Fran! Andio thief stole it!</div><hr>
+<div id="qSide" style="font-size:11px"></div>
+</div>
+
+<div class="hud" id="hudI">
+<h3>INVENTORY & EQUIPMENT SYSTEM - Clever Market</h3><div id="inv">- Empty Wallet (Lost) [Quest]<br>- Fruits x0 [Consumable - Don't be greedy]<br>- Last Wallet from Fran (Full Cash) P500 [Quest Item]<br>- Hermit Stick DEF+3<br>- Cheap List - Buy less!</div><br>
+<button onclick="eqStick()">Equip Hermit Stick</button><button onclick="buyFruit()">Buy 1 Fruit P10 [Cheap]</button><button onclick="buyMany()">Buy 10 Fruits P100 [Greedy!]</button><button onclick="this.parentElement.style.display='none'">Close Q</button>
+</div>
+
+<div class="hud" id="hudM"><canvas id="mini" width="150" height="150"></canvas><center>MINI-MAP<br>Clever Market</center></div>
+<div id="cross">+</div>
+
+<div id="skillW">
+<h2>PROGRESSION & SKILL TREE - Clever Cheap</h2>Points: <span id="sp">1</span><br>
+<button onclick="learn('cheap')">CLEVER CHEAP LV1 - Buy less, save wallet WIS+6</button><br>
+<button onclick="learn('wise')">WISE BUYER LV1 - Never forget wallet DEF+5</button><br>
+<button onclick="learn('frugal')">FRUGAL LV1 - Wallet +100, Greed -20%</button><br>
+<button onclick="learn('hermit')">HERMIT LESSON LV1 - Fran Hermit teaches cheap STR+5</button><br>
+<button onclick="learn('economic')">ECONOMIC DESTRUCTION AVOID LV1 - XP x2</button><br>
+<div id="sLog" style="color:#55ff55;margin-top:10px"></div><button onclick="document.getElementById('skillW').style.display='none'">Close K</button>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+let scene,camera,renderer,player,keys={},first=false,run=false,tm=0;
+let P={hp:100,max:100,greed:80,xp:0,lv:1,wallet:100,fruits:0,str:6,def:5,wis:7,sp:1};
+let enemies=[],npcs=[],stalls=[];
+window.start=()=>{document.getElementById('storyAll').style.display='none';init();}
+window.cChange=()=>{
+ let v=document.getElementById('classSel').value;
+ if(v.includes('Alpha')){P.str=6;P.wis=7;P.def=5; player.children[0].material.color.set(0xffaa00);}
+ if(v.includes('Fran')){P.wis=10;P.def=5;P.str=5; player.children[0].material.color.set(0x55ff55);}
+ if(v.includes('Guard')){P.def=9;P.str=6;P.wis=5; player.children[0].material.color.set(0x8888ff);}
+ upd();
+}
+function init(){
+ run=true;
+ scene=new THREE.Scene(); scene.background=new THREE.Color(0x1a1608); scene.fog=new THREE.Fog(0x1a1608,12,50);
+ camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,0.1,1000); renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setSize(innerWidth,innerHeight); document.body.appendChild(renderer.domElement);
+ scene.add(new THREE.AmbientLight(0xffeebb,0.8)); let dl=new THREE.DirectionalLight(0xffdd88,0.9); dl.position.set(10,15,10); scene.add(dl);
+ // 3D WORLD / MAP - Clever Market - Amazon homes
+ let ground=new THREE.Mesh(new THREE.PlaneGeometry(90,90), new THREE.MeshStandardMaterial({color:0x3d2e14})); ground.rotation.x=-Math.PI/2; scene.add(ground);
+ // Market stalls - fruits
+ for(let i=0;i<8;i++){
+   let stall=new THREE.Mesh(new THREE.BoxGeometry(4,2,3), new THREE.MeshStandardMaterial({color:0x8b5a2b})); stall.position.set(-20+i*6,1,-12); scene.add(stall);
+   let fruit=new THREE.Mesh(new THREE.SphereGeometry(0.4,8,8), new THREE.MeshStandardMaterial({color: new THREE.Color().setHSL(Math.random()*0.2+0.05,0.9,0.5)})); fruit.position.set(stall.position.x,2.3,stall.position.z); scene.add(fruit); stalls.push(fruit);
+ }
+ // Homes
+ for(let i=0;i<4;i++){let home=new THREE.Mesh(new THREE.BoxGeometry(6,4,6), new THREE.MeshStandardMaterial({color:0x5a4a2a})); home.position.set(-25+i*16,2,15); scene.add(home);}
+ // Player - Alpha Libero
+ let pg=new THREE.Group(); let mat=new THREE.MeshStandardMaterial({color:0xffaa00}); let b=new THREE.Mesh(new THREE.CapsuleGeometry(0.4,1.2,4,8), mat); b.position.y=0.9; pg.add(b); pg.position.set(0,0.9,18); scene.add(pg); player=pg;
+ // NPCs
+ spawnNPC(-8,0,10,"Fran Hermit","Alpha! Your greed made you forget wallet! I'm Fran Hermit! Learn to be Clever Cheap!","fran");
+ spawnNPC(8,0,10,"Market Guard","Andio thief ran! He stole wallet Day 1! Be careful!","guard");
+ spawnNPC(0,0,5,"Fruit Seller","Buy fruits! But don't be greedy! Buy less!","seller");
+ // ENEMIES & BOSSES - Andio Thief + Greed Demon
+ spawnEnemy(0,0,-18,"Andio - Thief Boss (Stole Wallet)",true,150);
+ spawnEnemy(7,0,-16,"Greed Demon - Economic Destruction",true,120);
+ spawnEnemy(-7,0,-16,"Expensive Fruit Monster",false,60);
+ spawnEnemy(12,0,-8,"Pride Shadow",false,55);
+ spawnEnemy(-12,0,-8,"Wasting Money Ghost",false,55);
+ addEventListener('keydown',e=>{
+   keys[e.key.toLowerCase()]=true; let k=e.key.toLowerCase();
+   if(k=='f')first=!first;
+   if(k=='q'){let el=document.getElementById('hudI'); el.style.display=el.style.display=='none'?'block':'none';}
+   if(k=='k'){let el=document.getElementById('skillW'); el.style.display=el.style.display=='none'?'block':'none';}
+   if(k=='e')inter();
+ });
+ addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false); addEventListener('mousedown',()=>{if(run)atk();}); addEventListener('mousemove',e=>{if(run&&document.pointerLockElement)player.rotation.y-=e.movementX*0.0025;}); renderer.domElement.addEventListener('click',()=>renderer.domElement.requestPointerLock());
+ animate(); qb(); upd();
+}
+function spawnNPC(x,y,z,name,diag,type){let g=new THREE.Group(); let c=type=='fran'?0x55ff55:type=='guard'?0x8888ff:type=='seller'?0xffaa44:0xffffff; let m=new THREE.Mesh(new THREE.CapsuleGeometry(0.35,0.9,4,8), new THREE.MeshStandardMaterial({color:c})); m.position.y=0.7; g.add(m); g.position.set(x,0,z); g.userData={name,diag,type}; scene.add(g); npcs.push(g);}
+function spawnEnemy(x,y,z,name,boss,hp){let g=new THREE.Group(); let c=boss?0xff3300:0xff6600; let m=new THREE.Mesh(new THREE.BoxGeometry(0.8,boss?2.1:1.3,0.7), new THREE.MeshStandardMaterial({color:c})); m.position.y=boss?1.05:0.65; g.add(m); g.position.set(x,0,z); g.userData={hp,max:hp,boss,name}; scene.add(g); enemies.push(g);}
+function inter(){
+ npcs.forEach(n=>{
+   if(n.position.distanceTo(player.position)<3){
+     document.getElementById('qD').innerText=n.userData.name+": "+n.userData.diag;
+     if(n.userData.type=='fran'){P.xp+=50; document.getElementById('qT').innerText="QUEST: Become Clever Cheap - Buy Less!"; document.getElementById('inv').innerHTML+="<br>+ Last Wallet P500 from Fran!"; P.wallet+=400; qb();}
+     if(n.userData.type=='seller'){document.getElementById('qD').innerText+=" Buy 1 fruit cheap, not 10 greedy!";}
+   }
+ });
+}
+function atk(){
+ enemies.forEach(en=>{
+   if(en.position.distanceTo(player.position)<3.2){
+     let dmg=P.str+6+Math.floor(Math.random()*5); en.userData.hp-=dmg; en.children[0].material.color.set(0xffffff); setTimeout(()=>en.children[0].material.color.set(0xff3300),120);
+     if(en.userData.hp<=0){scene.remove(en); enemies=enemies.filter(e=>e!=en); P.xp+=en.userData.boss?110:40; P.wallet+=20; if(en.userData.name.includes('Andio')){P.wallet+=100; document.getElementById('inv').innerHTML+="<br>+ Recovered Wallet! Andio defeated!";} if(enemies.length==0)win(); qb();}
+   }
+ });
+}
+window.eqStick=()=>{P.def+=3; document.getElementById('inv').innerHTML+="<br>[EQUIPPED Hermit Stick] DEF+3"; upd();}
+window.buyFruit=()=>{if(P.wallet>=10){P.wallet-=10; P.fruits++; P.greed=Math.max(0,P.greed-5); P.xp+=5; document.getElementById('inv').innerHTML+="<br>- Bought 1 fruit cheap P10"; qb(); upd();} else alert("No money! Be cheap!");}
+window.buyMany=()=>{if(P.wallet>=100){P.wallet-=100; P.fruits+=10; P.greed=Math.min(100,P.greed+20); document.getElementById('inv').innerHTML+="<br>- Bought 10 fruits GREEDY P100! Greed +20!"; qb(); upd();} else alert("No money!");}
+window.learn=(sk)=>{
+ if(P.sp<=0)return; P.sp--; document.getElementById('sp').innerText=P.sp; let log=document.getElementById('sLog');
+ if(sk=='cheap'){P.wis+=6; P.greed=Math.max(0,P.greed-15); log.innerHTML+="CLEVER CHEAP WIS+6 Greed -15<br>";}
+ if(sk=='wise'){P.def+=5; log.innerHTML+="WISE BUYER DEF+5 Never forget wallet<br>";}
+ if(sk=='frugal'){P.wallet+=100; P.greed=Math.max(0,P.greed-20); log.innerHTML+="FRUGAL Wallet+100 Greed-20%<br>";}
+ if(sk=='hermit'){P.str+=5; log.innerHTML+="HERMIT LESSON STR+5<br>";}
+ if(sk=='economic'){P.xp+=80; log.innerHTML+="ECONOMIC AVOID XP+80<br>";}
+ upd();
+}
+function qb(){
+ let side=document.getElementById('qSide');
+ side.innerHTML=`- Enemies: Andio Thief + Greed Demon (${enemies.length} left)<br>- Wallet: P${P.wallet} | Fruits: ${P.fruits}<br>- Greed Meter: ${P.greed}% (Low = Clever Cheap)<br>- Day: ${P.wallet>400?"Day 2 - You learned cheap!":"Day 1 - Lost wallet!"}<br>- Moral: Be cheap to defeat greed`;
+ if(P.xp>=100){P.lv++;P.xp=0;P.sp++;P.max+=15;P.hp=P.max;document.getElementById('lv').innerText=P.lv;document.getElementById('sp').innerText=P.sp; document.getElementById('sLog').innerHTML+=`LEVEL UP LVL ${P.lv}<br>`;}
+ upd();
+}
+function upd(){
+ document.getElementById('hpF').style.width=P.hp/P.max*100+"%";
+ document.getElementById('grF').style.width=P.greed+"%";
+ document.getElementById('xpF').style.width=P.xp+"%";
+ document.getElementById('wal').innerText=P.wallet; document.getElementById('fr').innerText=P.fruits;
+ document.getElementById('st').innerText=P.str;document.getElementById('df').innerText=P.def;document.getElementById('ws').innerText=P.wis;
+}
+function win(){
+ document.getElementById('qT').innerText="YOU ARE NOW CLEVER CHEAP!";
+ document.getElementById('qD').innerHTML="Alpha Libero learned! Buy less fruit! Never forget wallet! Fran Hermit: You are now Clever Cheap! You think wisely from past mistakes! <br><b>Moral: Be cheap to defeat greed and pride. Greed can lose all you want.</b>";
+ setTimeout(()=>alert("YOU WIN AS CLEVER CHEAP!\n\nAlpha Libero: Thank you Fran!\nLearned to buy less, save wallet!\nNever stolen again!\n\nMoral: Be cheap, not greedy!"),700);
+}
+function animate(){
+ if(!run)return; requestAnimationFrame(animate);
+ tm+=0.02;
+ let sp=0.09+P.wis*0.005; if(keys['shift']){sp*=1.7; P.greed+=0.15;} else if(P.greed>0)P.greed-=0.05;
+ if(keys['w'])player.translateZ(-sp); if(keys['s'])player.translateZ(sp); if(keys['a'])player.translateX(-sp); if(keys['d'])player.translateX(sp);
+ enemies.forEach(en=>{if(en.position.distanceTo(player.position)<13){en.lookAt(player.position); let d=new THREE.Vector3().subVectors(player.position,en.position).normalize().multiplyScalar(en.userData.boss?0.021:0.016); en.position.add(d); if(en.position.distanceTo(player.position)<1.5){P.hp-=0.25;}}});
+ if(first){camera.position.copy(player.position).add(new THREE.Vector3(0,1.1,0.2));} else{let off=new THREE.Vector3(0,4,8.5).applyQuaternion(player.quaternion); camera.position.copy(player.position).add(off); camera.lookAt(player.position.clone().add(new THREE.Vector3(0,0.9,0)));}
+ let ctx=document.getElementById('mini').getContext('2d'); ctx.clearRect(0,0,150,150); ctx.fillStyle="#1a1608"; ctx.fillRect(0,0,150,150);
+ ctx.fillStyle="#ffcc00"; ctx.fillRect(75+player.position.x,75+player.position.z,5,5);
+ enemies.forEach(en=>{ctx.fillStyle=en.userData.boss?"#ff3300":"#ff8800"; ctx.fillRect(75+en.position.x,75+en.position.z,4,4);});
+ npcs.forEach(np=>{ctx.fillStyle=np.userData.type=='fran'?"#55ff55":"#88aaff"; ctx.fillRect(75+np.position.x,75+np.position.z,3,3);});
+ if(P.hp<=0){alert("Alpha Libero broke! Greed lost all! Moral: Be cheap!"); location.reload();}
+ upd(); renderer.render(scene,camera);
+}
+</script>
+</body>
+</html>
